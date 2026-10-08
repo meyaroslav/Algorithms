@@ -60,30 +60,31 @@ ListItem *list_item_prev(ListItem *item)
 
 ListItem *list_insert(List *list, Data data)
 {
-    return list_insert_after(list, NULL, data);
+    ListItem *insert = new ListItem;
+    insert->data = data;
+    insert->next = list->first;
+    list->first = insert;
+    if (list->last == NULL)
+    {
+        list->last = insert;
+    }
+    return insert;
 }
 
 ListItem *list_insert_after(List *list, ListItem *item, Data data)
 {
-    ListItem *insert = new ListItem;
-    insert->data = data;
     if (item == NULL)
     {
-        insert->next = list->first;
-        list->first = insert;
-        if (list->last == NULL)
-        {
-            list->last = insert;
-        } 
+        return list_insert(list, data);
     }
-    else
+
+    ListItem *insert = new ListItem;
+    insert->data = data;
+    insert->next = item->next;
+    item->next = insert;
+    if (list->last == item)
     {
-        insert->next = item->next;
-        item->next = insert;
-        if (list->last == item)
-        {
-            list->last = insert;
-        } 
+        list->last = insert;
     }
     return insert;
 }
